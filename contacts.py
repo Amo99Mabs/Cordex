@@ -8,7 +8,7 @@ def load_contacts() -> Dict[str, str]:
     try:
         with open(DATA_FILE, "r", encoding="utf-8") as fh:
             data = json.load(fh)
-        if isinstance(data,dict)
+        if isinstance(data, dict):
             return {str(k): str(v) for k, v in data.items()}
     except FileNotFoundError:
          pass
@@ -17,10 +17,45 @@ def load_contacts() -> Dict[str, str]:
          return  {}
 
 
-def display_contact():
-    print("Name\t\tContact Number")
-    for key in contact:
-        print("{}\t\t{}".format(key, contact.get(key)))
+
+def save_contacts(contacts: Dict[str : str]) -> None:
+    try:
+         with open (DATA_FILE, "w", encoding="utf-8") as fh:
+              json.dump(contacts, fh, ensure_ascii=False, indent=2)
+    except OSError:
+         print("Error: failed to save contacts.")
+
+
+
+def normalize_for_lookup(name: str) -> str:
+     return name.strip().casefold()
+
+
+def find_contact_key(contacts: Dict[str: str],query_name: str) -> Optional[str]:
+     lookup = normalize_for_lookup(query_name)
+     for stored_name in contacts:
+          if normalize_for_lookup(stored_name) == lookup:
+               return stored_name
+     return None
+
+
+def valid_phone_number(phone: str) -> bool:
+     phone_s = phone = phone.strip()
+     pattern = re.compile(r"^\+?[\d\s\-]{7,20}$")
+     return bool(pattern.fullmatch(phone_s))
+
+
+def display_contacts(contacts: Dict[str : str]) -> None: 
+    if not contacts:
+         print("\nContact book is empty.\n")
+         return
+    print("\nName\t\tContact Number")
+    print("-" * 40)
+    for name in sorted(contacts):
+        print(f"{name}\t\t{contacts[name]}")
+        print()
+
+
 while True:
     choice = int(input("1.Add new contact➕  \n 2. Search contact🔍 \n 3. Display contact📃\n 4. Edit contact✍️\n 5. Delete contact🚮 \n 6. Exit🚶‍♂️\n Enter your choice "))
     if choice == 1:
