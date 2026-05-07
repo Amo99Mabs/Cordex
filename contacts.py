@@ -10,7 +10,7 @@ def load_contacts() -> Dict[str, str]:
             data = json.load(fh)
         if isinstance(data, dict):
             return {str(k): str(v) for k, v in data.items()}
-    except FileNotFoundError:
+    except FileNotFoundError: 
          pass
     except (json.JSONDecodeError, OSError):
          print("Warning: could not read contacts file - starting with an empty contact book.")
