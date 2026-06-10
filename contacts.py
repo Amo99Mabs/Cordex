@@ -15,7 +15,7 @@ def load_contacts() -> Dict[str, str]:
     except (json.JSONDecodeError, OSError):
          print("Warning: could not read contacts file - starting with an empty contact book.")
          return  {}
-
+ 
 
 
 def save_contacts(contacts: Dict[str, str]) -> None:
